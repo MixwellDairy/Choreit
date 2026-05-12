@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'choreit.v1';
 const ME = 'You';
-const MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const POINTS_PER_CHORE = 10;
 const POINTS_PER_STREAK_DAY = 5;
 
@@ -154,10 +154,10 @@ function renderProgress() {
 
   const now = new Date();
   const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const sevenDaysAgo = startToday - 6 * MILLISECONDS_IN_DAY;
+  const last7DaysStart = startToday - 6 * MS_PER_DAY;
 
   const today = state.history.filter((h) => h.createdAt >= startToday).length;
-  const week = state.history.filter((h) => h.createdAt >= sevenDaysAgo).length;
+  const week = state.history.filter((h) => h.createdAt >= last7DaysStart).length;
 
   document.getElementById('today-count').textContent = String(today);
   document.getElementById('week-count').textContent = String(week);
@@ -290,10 +290,10 @@ function render() {
 function loadState() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return structuredClone(initialState);
+    if (!stored) return getInitialState();
     const parsed = JSON.parse(stored);
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-      return structuredClone(initialState);
+      return getInitialState();
     }
     return {
       chores: Array.isArray(parsed.chores) ? parsed.chores : [],
@@ -301,8 +301,12 @@ function loadState() {
       feed: Array.isArray(parsed.feed) ? parsed.feed : []
     };
   } catch {
-    return structuredClone(initialState);
+    return getInitialState();
   }
+}
+
+function getInitialState() {
+  return structuredClone(initialState);
 }
 
 if ('serviceWorker' in navigator) {
