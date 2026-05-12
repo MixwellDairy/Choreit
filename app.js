@@ -191,6 +191,7 @@ function renderFeed() {
 
     fragment.querySelector('.like').addEventListener('click', () => {
       const target = state.feed.find((item) => item.id === post.id);
+      if (!target) return;
       target.likes += 1;
       persistAndRender();
     });
@@ -202,6 +203,7 @@ function renderFeed() {
       const text = commentTextInput.value.trim();
       if (!text) return;
       const target = state.feed.find((item) => item.id === post.id);
+      if (!target) return;
       target.comments.push({ by: ME, text, at: Date.now() });
       persistAndRender();
     });
@@ -287,7 +289,9 @@ function render() {
 
 function loadState() {
   try {
-    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return structuredClone(initialState);
+    const parsed = JSON.parse(stored);
     if (!parsed) return structuredClone(initialState);
     return {
       chores: Array.isArray(parsed.chores) ? parsed.chores : [],
