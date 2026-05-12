@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#2f9e44" />
+  <title>Choreit</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/icons/icon.svg" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Choreit ✅</h1>
+    <p>Fast chores. Social wins. Local-first privacy.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Quick Actions</h2>
+      <div class="quick-grid">
+        <button class="quick" data-quick="Washer done">Washer done</button>
+        <button class="quick" data-quick="Dryer done">Dryer done</button>
+        <button class="quick" data-quick="Dishwasher done">Dishwasher done</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Add Chore</h2>
+      <form id="chore-form" class="stack">
+        <input id="chore-title" type="text" required maxlength="80" placeholder="e.g. Vacuum living room" />
+        <div class="row">
+          <label for="chore-priority">Priority</label>
+          <select id="chore-priority">
+            <option value="high">High</option>
+            <option value="medium" selected>Medium</option>
+            <option value="low">Low</option>
+          </select>
+          <button type="submit">Add</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Priority Lists</h2>
+      <div class="columns">
+        <div>
+          <h3>High</h3>
+          <ul id="high-list" class="list"></ul>
+        </div>
+        <div>
+          <h3>Medium</h3>
+          <ul id="medium-list" class="list"></ul>
+        </div>
+        <div>
+          <h3>Low</h3>
+          <ul id="low-list" class="list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Progress</h2>
+      <div class="stats-grid">
+        <p><strong id="today-count">0</strong><span>done today</span></p>
+        <p><strong id="week-count">0</strong><span>done this week</span></p>
+        <p><strong id="streak-count">0</strong><span>day streak</span></p>
+      </div>
+      <ul id="history-list" class="list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Social Feed</h2>
+      <form id="post-form" class="stack">
+        <input id="post-text" type="text" maxlength="120" required placeholder="Share progress or celebrate a win" />
+        <div class="row">
+          <label for="post-visibility">Visibility</label>
+          <select id="post-visibility">
+            <option value="household">Household</option>
+            <option value="public">Public</option>
+          </select>
+          <button type="submit">Post</button>
+        </div>
+      </form>
+      <ul id="feed-list" class="list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Gamification</h2>
+      <p id="encouragement"></p>
+      <div>
+        <h3>Badges</h3>
+        <ul id="badge-list" class="chips"></ul>
+      </div>
+      <div>
+        <h3>Leaderboard</h3>
+        <ol id="leaderboard-list"></ol>
+      </div>
+    </section>
+  </main>
+
+  <template id="chore-item-template">
+    <li class="item">
+      <span class="item-title"></span>
+      <div class="item-actions">
+        <button class="complete">Done</button>
+        <button class="danger delete">Delete</button>
+      </div>
+    </li>
+  </template>
+
+  <template id="feed-item-template">
+    <li class="item stack feed-item">
+      <div class="feed-meta"></div>
+      <p class="feed-text"></p>
+      <div class="row">
+        <button class="like">👍 <span class="likes">0</span></button>
+      </div>
+      <form class="row comment-form">
+        <input type="text" maxlength="80" placeholder="Add comment" required />
+        <button type="submit">Comment</button>
+      </form>
+      <ul class="comments"></ul>
+    </li>
+  </template>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
