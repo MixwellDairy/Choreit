@@ -1,5 +1,8 @@
 const STORAGE_KEY = 'choreit.v1';
 const ME = 'You';
+const MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
+const POINTS_PER_CHORE = 10;
+const POINTS_PER_STREAK_DAY = 5;
 
 const initialState = {
   chores: [],
@@ -151,7 +154,7 @@ function renderProgress() {
 
   const now = new Date();
   const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const sevenDaysAgo = startToday - 6 * 24 * 60 * 60 * 1000;
+  const sevenDaysAgo = startToday - 6 * MILLISECONDS_IN_DAY;
 
   const today = state.history.filter((h) => h.createdAt >= startToday).length;
   const week = state.history.filter((h) => h.createdAt >= sevenDaysAgo).length;
@@ -193,10 +196,10 @@ function renderFeed() {
     });
 
     const commentForm = fragment.querySelector('.comment-form');
-    const commentInput = commentForm.querySelector('input');
+    const commentTextInput = commentForm.querySelector('input');
     commentForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      const text = commentInput.value.trim();
+      const text = commentTextInput.value.trim();
       if (!text) return;
       const target = state.feed.find((item) => item.id === post.id);
       target.comments.push({ by: ME, text, at: Date.now() });
@@ -230,7 +233,7 @@ function renderGamification() {
     ? badges.map((badge) => `<li>${badge}</li>`).join('')
     : '<li>Keep going for your first badge!</li>';
 
-  const points = completed * 10 + streak * 5 + likes;
+  const points = completed * POINTS_PER_CHORE + streak * POINTS_PER_STREAK_DAY + likes;
   const board = [
     { name: ME, points },
     { name: 'Alex', points: 90 },
